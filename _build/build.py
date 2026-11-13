@@ -141,7 +141,7 @@ def crumbs_html(items):
 def page_hero(crumbs, eyebrow, h1, lead, frame_word="ALUPRIME"):
     return f'''<section class="page-hero alu spot" id="page-hero"><div class="wrap">
 {crumbs_html(crumbs)}
-<div class="ph-copy stack"><p class="eyebrow">{eyebrow}</p><h1>{h1}</h1><p class="lead">{lead}</p></div>
+<div class="ph-copy stack">{('<p class="eyebrow">' + eyebrow + '</p>') if eyebrow else ''}<h1>{h1}</h1><p class="lead">{lead}</p></div>
 <div class="logo-frame alu spot" aria-hidden="true"><span class="emboss">{frame_word}</span></div>
 </div></section>'''
 
@@ -172,17 +172,14 @@ def faq_block(pairs, extra=""):
 
 home_body = f'''<main id="main">
 <section class="hero alu spot" aria-labelledby="hero-h"><div class="wrap hero-inner">
-<div class="hero-mark"><p class="eyebrow">Aluprime Window System · Lagos</p>
-<p class="wordmark emboss" aria-hidden="true">ALUPRIME</p></div>
+<div class="hero-mark"><p class="wordmark emboss" aria-hidden="true">ALUPRIME</p></div>
 <div class="hero-copy">
 <h1 id="hero-h">Ready-made aluminium windows for your building project.</h1>
-<p class="lead">Choose your window size online. Pick up from our factory or get delivery within Lagos.</p>
-<p class="muted">No waiting weeks for fabrication: the windows are already made in standard sizes.</p>
+<p class="lead">Standard sizes, already made. Choose yours online, then collect from our Lagos factory or get delivery within Lagos.</p>
 <div class="btn-row">
 <a class="btn btn-wa" data-wa="general" data-placement="home-hero" data-cta="chat" href="{WA_ICON_HREF}">Chat on WhatsApp</a>
 <a class="btn btn-metal alu" href="{{r}}windows/index.html">Browse windows</a>
 </div>
-<ul class="hero-facts"><li>Standard sizes, already made</li><li>Fixing kit included</li><li>Factory pickup or Lagos delivery</li></ul>
 </div>
 <div class="win-stage" aria-hidden="true">
 <div class="win">
@@ -190,7 +187,7 @@ home_body = f'''<main id="main">
 <div class="pane"><div class="scene"><div class="sun"></div>{SKYLINE}</div><div class="frost"></div><div class="sheen"></div></div>
 <div class="pane"><div class="scene"><div class="sun" style="left:-14%"></div>{SKYLINE}</div><div class="frost"></div><div class="sheen"></div><span class="win-handle"></span></div>
 </div>
-<p class="win-label">S-1512 · Sliding window · 1480 × 1180 mm</p>
+<p class="win-label">S-1512 sliding window, 1480 × 1180 mm frame</p>
 </div>
 </div>
 </div></section>
@@ -198,7 +195,7 @@ home_body = f'''<main id="main">
 <section class="on-dark" aria-labelledby="ring-h"><div class="wrap">
 <div class="sec-head rv"><div class="stack"><p class="eyebrow">The range</p><h2 id="ring-h">Six standard sizes, made before you ask.</h2>
 <p class="muted">Drag the ring, use the arrows or your keyboard. Every size is the outside of the frame, in millimetres.</p></div>
-<a class="btn btn-outline" href="{{r}}windows/index.html">See all windows</a></div>
+<a class="btn btn-outline" href="{{r}}windows/index.html">Browse windows</a></div>
 <div class="ring-wrap">
 <div class="ring-stage" id="ring-stage" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Aluprime windows. Use the left and right arrow keys to turn, Enter to open.">
 <div class="ring" id="ring"></div><div class="ring-floor"></div></div>
@@ -212,7 +209,7 @@ home_body = f'''<main id="main">
 </div></section>
 
 <section class="section-alt" id="home-fit" aria-labelledby="fit-h"><div class="wrap">
-<div class="sec-head rv"><div class="stack"><p class="eyebrow">Size your opening</p><h2 id="fit-h">Will a ready-made window fit your wall?</h2>
+<div class="sec-head rv"><div class="stack"><h2 id="fit-h">Will a ready-made window fit your wall?</h2>
 <p class="muted">Slide to your opening size. We place the closest window inside it and show the gap your installer needs for packers and sealant.</p></div></div>
 <div class="fit-tool">
 <div class="fit-controls rv">
@@ -230,19 +227,19 @@ home_body = f'''<main id="main">
 </div></section>
 
 <section aria-labelledby="outside-h"><div class="wrap route-wrap">
-<div class="sec-head"><div class="stack"><p class="eyebrow">Building outside Lagos?</p><h2 id="outside-h">Buy in Lagos. Send to site with your other materials.</h2>
+<div class="sec-head"><div class="stack"><h2 id="outside-h">Building outside Lagos? Buy here, send to site with your other materials.</h2>
 <p class="muted">Buy your windows while you buy the rest of your materials in Lagos. Collect them from our factory, or have them delivered to a Lagos address such as your supplier, a market or a loading point. Then send them to site on your own transport.</p></div></div>
 <div class="route-map"><div class="route-line"><i></i></div>
-<div class="stop"><span class="stop-pin alu">01</span><strong>Collect from the factory</strong><p class="small muted" data-copy="pickup"></p></div>
-<div class="stop"><span class="stop-pin alu">02</span><strong>Or Lagos delivery</strong><p class="small muted" data-copy="delivery"></p></div>
-<div class="stop"><span class="stop-pin alu">03</span><strong>Onward to your site</strong><p class="small muted" data-copy="onward"></p></div>
+<div class="stop"><span class="stop-pin alu">1</span><strong>Collect from the factory</strong><p class="small muted" data-copy="pickup"></p></div>
+<div class="stop"><span class="stop-pin alu">2</span><strong>Or Lagos delivery</strong><p class="small muted" data-copy="delivery"></p></div>
+<div class="stop"><span class="stop-pin alu">3</span><strong>Onward to your site</strong><p class="small muted" data-copy="onward"></p></div>
 </div>
 <p class="small muted" style="margin-top:20px">Tell us your project location on WhatsApp and we will advise on packing for the trip.</p>
 </div></section>
 
-<section class="section-alt" aria-labelledby="how-h"><div class="wrap">
-<div class="sec-head rv"><div class="stack"><p class="eyebrow">How it works</p><h2 id="how-h">From your measurements to your site in five steps.</h2></div></div>
-<ol class="timeline h">
+<section class="section-alt" aria-labelledby="how-h"><div class="wrap faq-grid">
+<div class="stack rv"><h2 id="how-h">From your measurements to your site in five steps.</h2><p class="muted">Nothing is fabricated to order, so the only wait is confirming your size and collecting.</p></div>
+<ol class="timeline">
 <li><strong>Find a window</strong><span class="small muted">Browse sliding, toilet and casement windows by size.</span></li>
 <li><strong>Check the size</strong><span class="small muted">Measure the opening and confirm with your installer. <a href="{{r}}will-it-fit/index.html">Size guide</a></span></li>
 <li><strong>Send an enquiry on WhatsApp</strong><span class="small muted">The window code and size are added to your message.</span></li>
@@ -256,11 +253,11 @@ home_body = f'''<main id="main">
 <div class="faq">{faq_block(HOME_FAQ, '<details><summary>Where is factory pickup?</summary><p data-factory></p></details>')}</div>
 </div></section>
 
-<section class="closing on-dark" aria-label="Get started"><div class="wrap">
+<section class="closing alu spot" aria-label="Get started"><div class="wrap">
 <p class="big" data-hl="made,measured,ready">Already made. Measured right. Ready when you are.</p>
 <div class="btn-row">
 <a class="btn btn-wa" data-wa="general" data-placement="home-closing" data-cta="chat" href="{WA_ICON_HREF}">Chat on WhatsApp</a>
-<a class="btn btn-outline" href="{{r}}windows/index.html">Browse windows</a>
+<a class="btn btn-metal alu" href="{{r}}windows/index.html">Browse windows</a>
 </div>
 </div></section>
 </main>'''
@@ -271,7 +268,7 @@ page("index.html",
      home_body, "home", "home", ld=[faq_ld([(q, a) for q, a in HOME_FAQ])])
 
 # ---------------------------------------------------------------- WINDOWS
-win_body = page_hero([("Home", "index.html"), ("Windows", "windows/")], "Catalogue",
+win_body = page_hero([("Home", "index.html"), ("Windows", "windows/")], "",
                      "Ready-made aluminium windows",
                      'Sizes shown are the window frame (width × height in mm). Your opening needs to be a little larger. <a href="{r}will-it-fit/index.html">Will it fit?</a>',
                      "WINDOWS") + '''
@@ -295,14 +292,13 @@ page("windows/index.html",
      win_body, "windows", "windows", crumbs=[("Home", ""), ("Windows", "windows/")])
 
 # ---------------------------------------------------------------- WILL IT FIT
-fit_body = page_hero([("Home", "index.html"), ("Will it fit?", "will-it-fit/")], "Size guide", "Will it fit?",
+fit_body = page_hero([("Home", "index.html"), ("Will it fit?", "will-it-fit/")], "", "Will it fit?",
                      "Two sizes matter: the opening in the wall and the frame of the window. Measure once, check here, and we confirm on WhatsApp.",
                      "FIT") + '''
 <main id="main">
 <section><div class="wrap">
 <div class="faq-grid">
 <div class="stack rv">
-<p class="eyebrow">Opening vs frame</p>
 <h2>The opening must be a little bigger than the frame.</h2>
 <p>The <strong>opening size</strong> is the hole in the wall. The <strong>frame size</strong> is the outside of the window. The gap lets your installer pack, fix and seal the window.</p>
 <div class="fit-figure"><svg viewBox="0 0 360 250" role="img" aria-labelledby="fit-fig-t"><title id="fit-fig-t">Opening size is the wall opening; frame size is the window; the gap between them is for packers and sealant.</title>
@@ -330,8 +326,8 @@ fit_body = page_hero([("Home", "index.html"), ("Will it fit?", "will-it-fit/")],
 </div></section>
 
 <section class="section-alt" aria-labelledby="chk-h"><div class="wrap">
-<div class="sec-head rv"><div class="stack"><p class="eyebrow">Check your opening</p><h2 id="chk-h">Type your smallest measurements.</h2>
-<p class="small muted">Guide only: a window may fit when the opening is about <span id="gap-text">10–40</span> mm larger than the frame in both directions. We confirm every size on WhatsApp before you pay.</p></div></div>
+<div class="sec-head rv"><div class="stack"><h2 id="chk-h">Type your smallest measurements.</h2>
+<p class="small muted">Guide only: a window may fit when the opening is about <span id="gap-text">10-40</span> mm larger than the frame in both directions. We confirm every size on WhatsApp before you pay.</p></div></div>
 <div class="fit-tool">
 <form id="checker" class="panel" novalidate>
 <div class="field-row">
@@ -347,7 +343,7 @@ fit_body = page_hero([("Home", "index.html"), ("Will it fit?", "will-it-fit/")],
 
 <section aria-labelledby="help-h"><div class="wrap">
 <div class="faq-grid">
-<div class="stack rv"><p class="eyebrow">Not sure?</p><h2 id="help-h">Ask us to check</h2><p>Send your measurements on WhatsApp. After the chat opens, attach photos of each opening with the tape measure showing.</p></div>
+<div class="stack rv"><h2 id="help-h">Ask us to check</h2><p>Send your measurements on WhatsApp. After the chat opens, attach photos of each opening with the tape measure showing.</p></div>
 <form id="help" class="panel" novalidate>
 <div class="field-row">
 <div class="field"><label for="hw">Opening width (mm)</label><input id="hw" type="number" inputmode="numeric"></div>

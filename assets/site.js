@@ -204,8 +204,8 @@
     return gw >= FIT.minGapMm && gw <= FIT.maxGapMm && gh >= FIT.minGapMm && gh <= FIT.maxGapMm;
   }
   function openingRange(p) {
-    return (p.frameWidthMm + FIT.minGapMm) + "–" + (p.frameWidthMm + FIT.maxGapMm) + " mm wide × " +
-      (p.frameHeightMm + FIT.minGapMm) + "–" + (p.frameHeightMm + FIT.maxGapMm) + " mm high";
+    return (p.frameWidthMm + FIT.minGapMm) + "-" + (p.frameWidthMm + FIT.maxGapMm) + " mm wide × " +
+      (p.frameHeightMm + FIT.minGapMm) + "-" + (p.frameHeightMm + FIT.maxGapMm) + " mm high";
   }
 
   /* ---------- shared page chrome ---------- */
@@ -377,7 +377,7 @@
       var fi = front();
       if (fi !== current) {
         current = fi; var p = P[fi];
-        cap.innerHTML = '<div class="code">' + esc(p.code) + " · " + (fi + 1) + " of " + n + '</div><strong style="font-size:1.2rem">' + esc(p.name) + '</strong><div class="small muted">' + dims(p) + " frame · " + esc(p.useCase) + '</div><a class="btn btn-outline" href="' + ROOT + "windows/index.html#" + p.code.toLowerCase() + '">View this window</a>';
+        cap.innerHTML = '<div class="code">' + esc(p.code) + '<span style="margin-left:14px">' + (fi + 1) + " of " + n + '</span></div><strong style="font-size:1.2rem">' + esc(p.name) + '</strong><div class="small muted">' + dims(p) + " frame · " + esc(p.useCase) + '</div><a class="btn btn-outline" href="' + ROOT + "windows/index.html#" + p.code.toLowerCase() + '">View this window</a>';
         if (live) live.textContent = p.name + ", " + dims(p);
       }
     }
@@ -531,7 +531,7 @@
   /* ---------- will it fit ---------- */
   function initFit() {
     var form = $("#checker");
-    var gt = $("#gap-text"); if (gt) gt.textContent = FIT.minGapMm + "–" + FIT.maxGapMm;
+    var gt = $("#gap-text"); if (gt) gt.textContent = FIT.minGapMm + "-" + FIT.maxGapMm;
     function check() {
       var w = num($("#ow").value), h = num($("#oh").value), out = $("#check-result");
       if (!w || !h) { out.innerHTML = "<p>Enter the smallest opening width and height to see which windows may fit.</p>"; var fv0 = $("#fit-live"); if (fv0) fv0.hidden = true; return; }
@@ -543,7 +543,7 @@
           return '<li><a href="' + ROOT + "windows/index.html#" + p.code.toLowerCase() + '">' + esc(p.code) + " " + esc(p.name) + "</a>, frame " + dims(p) + " (gap " + (w - p.frameWidthMm) + " mm × " + (h - p.frameHeightMm) + " mm)</li>";
         }).join("") + "</ul><p class=\"small\">This is a guide only. Confirm with your installer, and we will confirm on WhatsApp before you pay.</p>";
       } else {
-        out.innerHTML = "<p><strong>No catalogue window fits " + w + " × " + h + " mm within the " + FIT.minGapMm + "–" + FIT.maxGapMm + " mm gap.</strong> Send us the measurements below. We can suggest how to adjust the opening, or Brand Aluminium can make a window to size.</p>";
+        out.innerHTML = "<p><strong>No catalogue window fits " + w + " × " + h + " mm within the " + FIT.minGapMm + "-" + FIT.maxGapMm + " mm gap.</strong> Send us the measurements below. We can suggest how to adjust the opening, or Brand Aluminium can make a window to size.</p>";
       }
       $("#hw").value = $("#hw").value || w; $("#hh").value = $("#hh").value || h;
       updHelp();
@@ -562,7 +562,7 @@
   /* ---------- WhatsApp landing page ---------- */
   function initLanding() {
     var sel = $("#p1-product");
-    sel.innerHTML = P.map(function (p) { return '<option value="' + esc(p.code) + '">' + esc(p.code) + " · " + esc(p.name) + " · " + dims(p) + "</option>"; }).join("") +
+    sel.innerHTML = P.map(function (p) { return '<option value="' + esc(p.code) + '">' + esc(p.code) + " " + esc(p.name) + ", " + dims(p) + "</option>"; }).join("") +
       '<option value="other">Another size (type it below)</option>';
     function upd1() {
       var code = sel.value, other = code === "other";
