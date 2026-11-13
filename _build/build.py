@@ -16,11 +16,14 @@ FONT = "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..
 MARK = ('<span class="brand-mark alu" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="2.5" y="2.5" width="15" height="15" rx="1" '
         'fill="none" stroke="#2b3338" stroke-width="2"/><path d="M10 3v14M3 10h7" stroke="#2b3338" stroke-width="1.6"/></svg></span>')
 WA_ICON_HREF = "https://wa.me/"
-# The 404 page is served for any URL, so relative links cannot work on their own.
-# This works out the site root (e.g. /Aluprime/ on GitHub Pages, / on a real domain)
-# and sets a <base> before the stylesheet and scripts load.
-BASE_404 = ('<script>(function(){var s=location.pathname.split("/")[1];var b=document.createElement("base");'
-            'b.href=(/\\.github\\.io$/.test(location.hostname)&&s?"/"+s+"/":"/");document.head.appendChild(b);})();</script>\n')
+# The 404 page is served for any URL, so relative asset paths cannot work. It works out
+# the site root itself (/<repo>/ on GitHub Pages, / on a real domain), sets a <base> for
+# the links, and loads its own stylesheet and scripts from that root. Nothing is written as
+# a static tag, so the browser's look-ahead scanner has nothing to fetch from the wrong path.
+ROOT_404 = ('(function(){var s=location.pathname.split("/")[1];window.ALP_ROOT=(/\\.github\\.io$/.test(location.hostname)&&s?"/"+s+"/":"/");'
+            'var b=document.createElement("base");b.href=ALP_ROOT;document.head.appendChild(b);})();')
+HEAD_404 = ('<script>' + ROOT_404 + 'var l=document.createElement("link");l.rel="stylesheet";l.href=ALP_ROOT+"assets/site.css";document.head.appendChild(l);</script>\n')
+SCRIPTS_404 = ('<script>["config","products","site","fx"].forEach(function(n){var x=document.createElement("script");x.src=ALP_ROOT+"assets/"+n+".js";x.async=false;document.body.appendChild(x);});</script>')
 BAR = '<script>/* show notices before first paint so the page does not jump */(function(C){try{var o=C.prototypeTools&&sessionStorage.getItem("alp_mode");var live=(o||C.mode)==="live";var lb=document.getElementById("launch-bar");if(lb&&!live){lb.hidden=false;lb.firstChild.textContent=C.launchNotice||"";}if(C.prototypeTools){document.getElementById("proto-bar").hidden=false;}}catch(e){}})(window.ALUPRIME_CONFIG||{});</script>'
 
 
@@ -59,7 +62,7 @@ def footer(r):
 <div class="test-panel" id="test-panel" hidden aria-live="polite"></div>'''
 
 
-def page(path, title, desc, body, page_key, current, ld=None, crumbs=None, extra_head="", chrome=True, r=None, pre_head=""):
+def page(path, title, desc, body, page_key, current, ld=None, crumbs=None, extra_head="", chrome=True, r=None, self_loading=False):
     depth = path.count("/")
     r = ("../" * depth) if r is None else r
     url = SITE + "/" + (path.replace("index.html", ""))
@@ -72,6 +75,14 @@ def page(path, title, desc, body, page_key, current, ld=None, crumbs=None, extra
             {"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + "/" + u} for i, (n, u) in enumerate(crumbs)]})
     if ld:
         graphs.extend(ld)
+    if self_loading:
+        assets_head, assets_foot = HEAD_404, SCRIPTS_404
+    else:
+        assets_head = (f'<link rel="preload" href="{r}assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>\n'
+                       f'<link rel="preload" href="{r}assets/img/brushed.webp" as="image" type="image/webp" fetchpriority="high">\n'
+                       f'<link rel="stylesheet" href="{r}assets/site.css">\n<script src="{r}assets/config.js"></script>')
+        assets_foot = (f'<script src="{r}assets/products.js"></script>\n<script src="{r}assets/site.js"></script>\n'
+                       f'<script src="{r}assets/fx.js" defer></script>')
     ldjson = json.dumps({"@context": "https://schema.org", "@graph": graphs}, ensure_ascii=False, separators=(",", ":"))
     head = f'''<!DOCTYPE html>
 <html lang="en-NG">
@@ -96,10 +107,7 @@ def page(path, title, desc, body, page_key, current, ld=None, crumbs=None, extra
 <meta name="twitter:description" content="{esc(desc)}">
 <meta name="twitter:image" content="{SITE}/assets/img/og-aluprime.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Crect width='20' height='20' rx='4' fill='%23c9ced2'/%3E%3Crect x='4' y='4' width='12' height='12' fill='none' stroke='%232b3338' stroke-width='1.8'/%3E%3Cpath d='M10 4v12' stroke='%232b3338' stroke-width='1.4'/%3E%3C/svg%3E">
-<link rel="preload" href="{r}assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
-{pre_head}<link rel="preload" href="{r}assets/img/brushed.webp" as="image" type="image/webp" fetchpriority="high">
-<link rel="stylesheet" href="{r}assets/site.css">
-<script src="{r}assets/config.js"></script>
+{assets_head}
 {extra_head}<script type="application/ld+json">{ldjson}</script>
 </head>
 <body data-page="{page_key}" data-root="{r}">
@@ -107,9 +115,7 @@ def page(path, title, desc, body, page_key, current, ld=None, crumbs=None, extra
     top = header(r, current) if chrome else ""
     bottom = footer(r) if chrome else '<div class="test-panel" id="test-panel" hidden aria-live="polite"></div>'
     scripts = f'''
-<script src="{r}assets/products.js"></script>
-<script src="{r}assets/site.js"></script>
-<script src="{r}assets/fx.js" defer></script>
+{assets_foot}
 <script>document.getElementById("yr")&&(document.getElementById("yr").textContent=new Date().getFullYear());</script>
 </body>
 </html>
@@ -456,4 +462,4 @@ nf_body = '''<main id="main">
 </div></section>
 </main>'''
 page("404.html", "Page not found | Aluprime", "This page could not be found. Browse Aluprime ready-made aluminium windows or message us on WhatsApp.",
-     nf_body, "404", "", extra_head='<meta name="robots" content="noindex">\n', r="", pre_head=BASE_404)
+     nf_body, "404", "", extra_head='<meta name="robots" content="noindex">\n', r="", self_loading=True)
