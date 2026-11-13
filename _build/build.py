@@ -16,6 +16,11 @@ FONT = "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..
 MARK = ('<span class="brand-mark alu" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="2.5" y="2.5" width="15" height="15" rx="1" '
         'fill="none" stroke="#2b3338" stroke-width="2"/><path d="M10 3v14M3 10h7" stroke="#2b3338" stroke-width="1.6"/></svg></span>')
 WA_ICON_HREF = "https://wa.me/"
+# The 404 page is served for any URL, so relative links cannot work on their own.
+# This works out the site root (e.g. /Aluprime/ on GitHub Pages, / on a real domain)
+# and sets a <base> before the stylesheet and scripts load.
+BASE_404 = ('<script>(function(){var s=location.pathname.split("/")[1];var b=document.createElement("base");'
+            'b.href=(/\\.github\\.io$/.test(location.hostname)&&s?"/"+s+"/":"/");document.head.appendChild(b);})();</script>\n')
 BAR = '<script>/* show notices before first paint so the page does not jump */(function(C){try{var o=C.prototypeTools&&sessionStorage.getItem("alp_mode");var live=(o||C.mode)==="live";var lb=document.getElementById("launch-bar");if(lb&&!live){lb.hidden=false;lb.firstChild.textContent=C.launchNotice||"";}if(C.prototypeTools){document.getElementById("proto-bar").hidden=false;}}catch(e){}})(window.ALUPRIME_CONFIG||{});</script>'
 
 
@@ -54,7 +59,7 @@ def footer(r):
 <div class="test-panel" id="test-panel" hidden aria-live="polite"></div>'''
 
 
-def page(path, title, desc, body, page_key, current, ld=None, crumbs=None, extra_head="", chrome=True, r=None):
+def page(path, title, desc, body, page_key, current, ld=None, crumbs=None, extra_head="", chrome=True, r=None, pre_head=""):
     depth = path.count("/")
     r = ("../" * depth) if r is None else r
     url = SITE + "/" + (path.replace("index.html", ""))
@@ -92,7 +97,7 @@ def page(path, title, desc, body, page_key, current, ld=None, crumbs=None, extra
 <meta name="twitter:image" content="{SITE}/assets/img/og-aluprime.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Crect width='20' height='20' rx='4' fill='%23c9ced2'/%3E%3Crect x='4' y='4' width='12' height='12' fill='none' stroke='%232b3338' stroke-width='1.8'/%3E%3Cpath d='M10 4v12' stroke='%232b3338' stroke-width='1.4'/%3E%3C/svg%3E">
 <link rel="preload" href="{r}assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{r}assets/img/brushed.webp" as="image" type="image/webp" fetchpriority="high">
+{pre_head}<link rel="preload" href="{r}assets/img/brushed.webp" as="image" type="image/webp" fetchpriority="high">
 <link rel="stylesheet" href="{r}assets/site.css">
 <script src="{r}assets/config.js"></script>
 {extra_head}<script type="application/ld+json">{ldjson}</script>
@@ -447,8 +452,8 @@ nf_body = '''<main id="main">
 <p class="wordmark emboss" aria-hidden="true">404</p>
 <h1 style="font-size:clamp(1.6rem,4vw,2.4rem)">This page doesn’t fit the opening.</h1>
 <p class="lead">The link may be old or mistyped. Try one of these instead.</p>
-<div class="btn-row"><a class="btn btn-metal alu" href="/index.html">Home</a><a class="btn btn-metal alu" href="/windows/">All windows</a><a class="btn btn-wa" data-wa="general" data-placement="404" data-cta="chat" href="https://wa.me/">Chat on WhatsApp</a></div>
+<div class="btn-row"><a class="btn btn-metal alu" href="index.html">Home</a><a class="btn btn-metal alu" href="windows/">All windows</a><a class="btn btn-wa" data-wa="general" data-placement="404" data-cta="chat" href="https://wa.me/">Chat on WhatsApp</a></div>
 </div></section>
 </main>'''
 page("404.html", "Page not found | Aluprime", "This page could not be found. Browse Aluprime ready-made aluminium windows or message us on WhatsApp.",
-     nf_body, "404", "", extra_head='<meta name="robots" content="noindex">\n', r="/")
+     nf_body, "404", "", extra_head='<meta name="robots" content="noindex">\n', r="", pre_head=BASE_404)
