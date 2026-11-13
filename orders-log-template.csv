@@ -1,0 +1,2 @@
+date_paid,order_ref,customer_name,customer_whatsapp,ref_source,ref_placement,product_codes,windows_qty,order_value_ngn_incl_vat,fulfilment,lagos_delivery_area,project_state,confirmed_by,notes
+2027-04-14,AP-0001,EXAMPLE ROW - delete,2348000000000,ig-bio,product-page,S-1212 x4; P-0606 x2,6,0,factory pickup,,Oyo,Accounts,Example only: shows the format
